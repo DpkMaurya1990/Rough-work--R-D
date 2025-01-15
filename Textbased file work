@@ -1,0 +1,3 @@
+Textbased files are those files which allow copy of data from pdf files.
+Textbased pdf files allow us to extract the data from pdf files.
+We can extact the text from PDF files by using 2 python libraries which are (A) PyPDF (B) PYmuPDF
