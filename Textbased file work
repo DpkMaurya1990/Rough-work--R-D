@@ -27,4 +27,7 @@ Example 1st : reader = PdfReader('example.pdf')
 "In Python, a library is a collection of modules, while a module is a single file that contains code. 
 Libraries are used to provide functionality, while modules are the building blocks of libraries. "
 
-Example 2nd:  
+Example 2nd:  print.len(reader.pages))
+Pages is the property give the list of the pageObjects. So here we can use the in-built function of python to get number of pages in the PDF.
+
+
