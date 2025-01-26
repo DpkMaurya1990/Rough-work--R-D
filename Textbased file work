@@ -1,33 +1,81 @@
-Textbased files are those files which allow copy of data from pdf files.
-Textbased pdf files allow us to extract the data from pdf files.
-We can extact the text from PDF files by using 2 python libraries which are (A) PyPDF (B) PYmuPDF
-
-# importing required modules
+import os
 from pypdf import PdfReader
 
-# creating a pdf reader object
-reader = PdfReader('example.pdf')
+input_folder = r"E:\Rahul_Sir\Text_based_pdf\A100"
+output_folder = r"E:\Rahul_Sir\Text_based_pdf\Test7"
 
-# printing number of pages in pdf file
-print(len(reader.pages))
+if not os.path.exists(output_folder):
+    os.makedirs(output_folder)
+    print(f"{output_folder} created sucessfully")
+else:
+    print(f"{output_folder} is already exist")
 
-# getting a specific page from the pdf file
-page = reader.pages[0]
+#initialize counters
+matched_files = 0  #Total matched files
+Total_files = 0    #Total processed files
 
-# extracting text from page
-text = page.extract_text()
-print(text)
+    
 
-Let understand each code
-Example 1st : reader = PdfReader('example.pdf')
-(A) We have created an object called Pdfreader from the class Pypdf which is called module
-(B) PdfReader class takes the required positional argument of the path to the file
+for filename in os.listdir(input_folder):
+    if filename.endswith(".pdf"):
+        Total_files += 1    #INCREAMENT TOTAL FILES
+        pdf_path = os.path.join(input_folder, filename)
 
 
-"In Python, a library is a collection of modules, while a module is a single file that contains code. 
-Libraries are used to provide functionality, while modules are the building blocks of libraries. "
+#Load the file
+        try:
 
-Example 2nd:  print.len(reader.pages))
-Pages is the property give the list of the pageObjects. So here we can use the in-built function of python to get number of pages in the PDF.
+            reader = PdfReader(pdf_path)
+            print(f"File is processing:'{filename}'")
+
+
+            extracted_data = ""
+            pdf_char_count = ""
+
+            for pages in reader.pages:
+                page_text = pages.extract_text()
+                extracted_data += page_text
+                pdf_char_count =+ len(page_text)
+                
+            #Saved the extracted text into Text file
+
+            output_file = os.path.join(output_folder, filename.replace(".pdf", ".txt"))
+            with open(output_file, "w", encoding="utf-8") as text_file:
+                    text_file.write(extracted_data)
+
+            # Count the character into Saved File
+            with open(output_file, "r", encoding = "utf-8") as text_file:
+                 Extracted_char_count = len(text_file.read())
+
+            #Count Character from both PDF and Extracted Text file
+            print(f"'{filename}' saved to '{output_file}'")
+            print(f" Count of {pdf_char_count} file is:")
+            print(f" Count of {Extracted_char_count} file is:")
+
+            #Compare count of Text from both files
+
+            if pdf_char_count == Extracted_char_count:
+                 matched_files =+ 1     #Increament Matched Files
+                 print(f"Extracted text from {filename} are matched")
+        
+            else:
+                 print (f" Some values are missing from {filename}")
+
+        except Exception as e:
+            print("An error occurred in '{filename}': {e}")
+    
+    #count the percentage
+    if Total_files>0:
+         matched_percentage = (matched_files / Total_files)*100
+         Un_matched_percentage = 100 - matched_percentage
+
+
+
+print("\nSummary")
+print(f"Total PDF file are processed : {Total_files}")
+print(f"Total Matched files : {matched_files}")
+print(f"Total unmatched files : {Total_files - matched_files}")
+print(f"Matched percentages is  : {matched_percentage:.2f}%")
+print(f"Un-Matched percentages is  : {Un_matched_percentage:.2f}%")
 
 
